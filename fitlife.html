@@ -1,0 +1,4750 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FitLife — Saúde, Treino e Bem-estar</title>
+
+<style>
+/* =========================================================
+   FITLIFE — ESTILO GERAL
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter, Arial, Helvetica, sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:var(--fundo);
+    color:var(--texto);
+    line-height:1.6;
+    transition:background .3s,color .3s;
+}
+
+:root{
+    --verde:#22c55e;
+    --verde-escuro:#15803d;
+    --verde-claro:#86efac;
+    --azul:#0ea5e9;
+    --fundo:#07111f;
+    --fundo2:#0b1728;
+    --card:#111c2d;
+    --card2:#17243a;
+    --texto:#f8fafc;
+    --cinza:#94a3b8;
+    --borda:#263852;
+    --perigo:#ef4444;
+    --amarelo:#eab308;
+    --sombra:0 20px 50px rgba(0,0,0,.25);
+}
+
+body.light{
+    --fundo:#f1f5f9;
+    --fundo2:#e2e8f0;
+    --card:#ffffff;
+    --card2:#f8fafc;
+    --texto:#0f172a;
+    --cinza:#64748b;
+    --borda:#dbe3ec;
+    --sombra:0 15px 40px rgba(15,23,42,.10);
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar{
+    width:9px;
+}
+
+::-webkit-scrollbar-track{
+    background:var(--fundo);
+}
+
+::-webkit-scrollbar-thumb{
+    background:var(--verde);
+    border-radius:20px;
+}
+
+/* =========================================================
+   TELA DE AUTENTICAÇÃO
+========================================================= */
+
+.auth-screen{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    background:
+        radial-gradient(circle at top right,rgba(34,197,94,.18),transparent 35%),
+        radial-gradient(circle at bottom left,rgba(14,165,233,.12),transparent 30%),
+        var(--fundo);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.auth-screen.hidden{
+    display:none;
+}
+
+.auth-box{
+    width:min(460px,100%);
+    background:rgba(17,28,45,.95);
+    border:1px solid var(--borda);
+    border-radius:28px;
+    padding:35px;
+    box-shadow:var(--sombra);
+}
+
+body.light .auth-box{
+    background:white;
+}
+
+.auth-logo{
+    text-align:center;
+    font-size:34px;
+    font-weight:900;
+    color:var(--verde);
+    margin-bottom:5px;
+}
+
+.auth-logo span{
+    color:var(--texto);
+}
+
+.auth-subtitle{
+    text-align:center;
+    color:var(--cinza);
+    margin-bottom:28px;
+}
+
+.auth-tabs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    background:var(--fundo2);
+    border-radius:12px;
+    padding:4px;
+    margin-bottom:25px;
+}
+
+.auth-tabs button{
+    border:0;
+    background:transparent;
+    color:var(--cinza);
+    padding:11px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.auth-tabs button.active{
+    background:var(--verde);
+    color:white;
+}
+
+.auth-form{
+    display:none;
+}
+
+.auth-form.active{
+    display:block;
+}
+
+.auth-form h2{
+    margin-bottom:18px;
+}
+
+.auth-input{
+    margin-bottom:15px;
+}
+
+.auth-input label{
+    display:block;
+    color:var(--cinza);
+    font-size:13px;
+    margin-bottom:6px;
+}
+
+.auth-input input{
+    width:100%;
+    padding:14px;
+    border:1px solid var(--borda);
+    background:var(--fundo);
+    color:var(--texto);
+    border-radius:11px;
+    outline:none;
+}
+
+.auth-input input:focus{
+    border-color:var(--verde);
+}
+
+.auth-message{
+    min-height:22px;
+    color:#fca5a5;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+/* =========================================================
+   APP
+========================================================= */
+
+#app{
+    display:none;
+}
+
+#app.visible{
+    display:block;
+}
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+nav{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:rgba(7,17,31,.94);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 5%;
+}
+
+body.light nav{
+    background:rgba(255,255,255,.92);
+    border-bottom:1px solid var(--borda);
+}
+
+.logo{
+    font-size:25px;
+    font-weight:900;
+    color:var(--verde);
+}
+
+.logo span{
+    color:var(--texto);
+}
+
+.menu{
+    display:flex;
+    gap:20px;
+    align-items:center;
+}
+
+.menu a{
+    text-decoration:none;
+    color:var(--cinza);
+    font-size:13px;
+    transition:.25s;
+}
+
+.menu a:hover{
+    color:var(--verde);
+}
+
+.nav-actions{
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+.icon-btn{
+    width:40px;
+    height:40px;
+    border-radius:10px;
+    border:1px solid var(--borda);
+    background:var(--card);
+    color:var(--texto);
+    cursor:pointer;
+}
+
+.menu-btn{
+    display:none;
+    font-size:25px;
+    cursor:pointer;
+}
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    padding:13px 20px;
+    background:var(--verde);
+    color:white;
+    text-decoration:none;
+    border-radius:11px;
+    font-weight:bold;
+    border:none;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.btn:hover{
+    background:var(--verde-escuro);
+    transform:translateY(-2px);
+}
+
+.btn-secundario{
+    background:transparent;
+    border:1px solid var(--borda);
+    color:var(--texto);
+}
+
+.btn-perigo{
+    background:var(--perigo);
+}
+
+.btn-pequeno{
+    padding:9px 13px;
+    font-size:12px;
+}
+
+.btn-full{
+    width:100%;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    min-height:650px;
+    display:flex;
+    align-items:center;
+    padding:80px 8%;
+    background:
+        linear-gradient(90deg,rgba(2,6,23,.96),rgba(2,6,23,.58),rgba(2,6,23,.30)),
+        url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1800&q=90");
+    background-size:cover;
+    background-position:center;
+}
+
+.hero-content{
+    max-width:700px;
+}
+
+.tag{
+    display:inline-block;
+    background:rgba(34,197,94,.15);
+    border:1px solid rgba(34,197,94,.4);
+    color:#86efac;
+    padding:8px 15px;
+    border-radius:50px;
+    margin-bottom:20px;
+    font-size:13px;
+}
+
+.hero h1{
+    font-size:clamp(40px,6vw,72px);
+    line-height:1.05;
+    margin-bottom:25px;
+}
+
+.hero h1 span{
+    color:var(--verde);
+}
+
+.hero p{
+    color:#cbd5e1;
+    font-size:18px;
+    max-width:600px;
+    margin-bottom:30px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+/* =========================================================
+   SEÇÕES
+========================================================= */
+
+section{
+    padding:80px 7%;
+}
+
+.titulo{
+    text-align:center;
+    margin-bottom:45px;
+}
+
+.titulo small{
+    color:var(--verde);
+    text-transform:uppercase;
+    font-weight:bold;
+    letter-spacing:2px;
+}
+
+.titulo h2{
+    font-size:40px;
+    margin-top:8px;
+}
+
+.titulo p{
+    max-width:720px;
+    margin:10px auto;
+    color:var(--cinza);
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.dashboard{
+    background:
+        linear-gradient(135deg,#0f172a,#064e3b);
+}
+
+.dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    margin-bottom:25px;
+}
+
+.dashboard-header h2{
+    font-size:30px;
+}
+
+.dashboard-header p{
+    color:#cbd5e1;
+}
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+}
+
+.dashboard-card{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.10);
+    padding:22px;
+    border-radius:18px;
+}
+
+.dashboard-card .dash-icon{
+    font-size:28px;
+}
+
+.dashboard-card h3{
+    margin-top:8px;
+    font-size:28px;
+    color:#fff;
+}
+
+.dashboard-card p{
+    color:#cbd5e1;
+    font-size:13px;
+}
+
+.progress{
+    height:9px;
+    background:rgba(255,255,255,.15);
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:13px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0;
+    background:linear-gradient(90deg,#38bdf8,#22c55e);
+    border-radius:20px;
+    transition:width .5s;
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.saude-grid,
+.suplementos-grid,
+.objetivos{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.saude-card,
+.suplemento,
+.objetivo,
+.app-card{
+    background:var(--card);
+    border:1px solid var(--borda);
+    border-radius:18px;
+    transition:.25s;
+}
+
+.saude-card{
+    padding:28px;
+}
+
+.saude-card:hover,
+.suplemento:hover,
+.objetivo:hover,
+.app-card:hover{
+    transform:translateY(-5px);
+    border-color:var(--verde);
+    box-shadow:var(--sombra);
+}
+
+.icone{
+    font-size:40px;
+    margin-bottom:12px;
+}
+
+.saude-card h3{
+    color:var(--verde-claro);
+    margin-bottom:8px;
+}
+
+.saude-card p,
+.suplemento-info p{
+    color:var(--cinza);
+    font-size:14px;
+}
+
+/* =========================================================
+   ESTATÍSTICAS
+========================================================= */
+
+.estatisticas{
+    background:linear-gradient(135deg,#0f172a,#064e3b);
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    text-align:center;
+}
+
+.numero{
+    font-size:42px;
+    color:var(--verde);
+    font-weight:bold;
+}
+
+.estatisticas p{
+    color:#cbd5e1;
+}
+
+/* =========================================================
+   SUPLEMENTOS
+========================================================= */
+
+.suplemento{
+    overflow:hidden;
+}
+
+.suplemento img{
+    width:100%;
+    height:190px;
+    object-fit:cover;
+}
+
+.suplemento-info{
+    padding:22px;
+}
+
+.suplemento-info h3{
+    color:var(--verde);
+    font-size:23px;
+    margin-bottom:8px;
+}
+
+.badge{
+    display:inline-block;
+    background:#064e3b;
+    color:#86efac;
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:11px;
+    margin-bottom:10px;
+}
+
+/* =========================================================
+   APP CARDS / FORMULÁRIOS
+========================================================= */
+
+.app-card{
+    padding:25px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.campo{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.campo label{
+    color:var(--cinza);
+    font-size:13px;
+}
+
+.campo input,
+.campo select,
+.campo textarea{
+    padding:13px;
+    border-radius:10px;
+    border:1px solid var(--borda);
+    background:var(--fundo);
+    color:var(--texto);
+    outline:none;
+    resize:vertical;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus{
+    border-color:var(--verde);
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+/* =========================================================
+   PERFIL
+========================================================= */
+
+.perfil-layout{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    gap:25px;
+}
+
+.perfil-resumo{
+    background:linear-gradient(160deg,#064e3b,#0f172a);
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    height:max-content;
+}
+
+.avatar{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:var(--verde);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 15px;
+    font-size:35px;
+    font-weight:bold;
+}
+
+.perfil-resumo h3{
+    font-size:22px;
+}
+
+.perfil-resumo p{
+    color:#cbd5e1;
+    font-size:13px;
+}
+
+/* =========================================================
+   TABELAS / HISTÓRICO
+========================================================= */
+
+.tabela-wrap{
+    overflow-x:auto;
+    margin-top:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:13px;
+    text-align:left;
+    border-bottom:1px solid var(--borda);
+}
+
+th{
+    color:var(--verde);
+    font-size:13px;
+}
+
+td{
+    color:var(--cinza);
+    font-size:13px;
+}
+
+/* =========================================================
+   DIÁRIO
+========================================================= */
+
+.diario-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+.lista-registros{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:20px;
+}
+
+.registro{
+    background:var(--fundo);
+    border:1px solid var(--borda);
+    padding:15px;
+    border-radius:12px;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.registro strong{
+    color:var(--texto);
+}
+
+.registro small{
+    color:var(--cinza);
+}
+
+.excluir{
+    color:#fca5a5;
+    cursor:pointer;
+    border:0;
+    background:none;
+}
+
+/* =========================================================
+   ÁGUA
+========================================================= */
+
+.water-box{
+    text-align:center;
+}
+
+.water-number{
+    font-size:45px;
+    font-weight:bold;
+    color:#38bdf8;
+}
+
+.water-glasses{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px;
+    margin:20px 0;
+}
+
+.glass{
+    width:38px;
+    height:48px;
+    border:2px solid #38bdf8;
+    border-radius:7px 7px 12px 12px;
+    background:transparent;
+    cursor:pointer;
+}
+
+.glass.active{
+    background:#38bdf8;
+}
+
+/* =========================================================
+   TREINOS
+========================================================= */
+
+.treino{
+    margin-top:25px;
+    background:var(--card);
+    padding:25px;
+    border-radius:18px;
+    border:1px solid var(--borda);
+}
+
+.exercicio{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    padding:15px;
+    border-bottom:1px solid var(--borda);
+}
+
+.exercicio:last-child{
+    border-bottom:none;
+}
+
+.exercicio strong{
+    color:var(--texto);
+}
+
+.exercicio span{
+    color:var(--cinza);
+    font-size:13px;
+}
+
+/* =========================================================
+   PRINCÍPIOS
+========================================================= */
+
+.principios{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    align-items:center;
+}
+
+.principios img{
+    width:100%;
+    border-radius:20px;
+    height:450px;
+    object-fit:cover;
+}
+
+.lista{
+    list-style:none;
+}
+
+.lista li{
+    margin-bottom:20px;
+    padding-left:35px;
+    position:relative;
+    color:var(--cinza);
+}
+
+.lista li::before{
+    content:"✓";
+    position:absolute;
+    left:0;
+    color:var(--verde);
+    font-weight:bold;
+    font-size:20px;
+}
+
+/* =========================================================
+   FAQ
+========================================================= */
+
+.faq{
+    max-width:850px;
+    margin:auto;
+}
+
+.pergunta{
+    background:var(--card);
+    margin-bottom:12px;
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid var(--borda);
+}
+
+.pergunta button{
+    width:100%;
+    background:none;
+    color:var(--texto);
+    border:none;
+    padding:20px;
+    text-align:left;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+}
+
+.resposta{
+    display:none;
+    padding:0 20px 20px;
+    color:var(--cinza);
+    font-size:14px;
+}
+
+/* =========================================================
+   WHATSAPP
+========================================================= */
+
+.whatsapp{
+    position:fixed;
+    right:22px;
+    bottom:22px;
+    z-index:3000;
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    background:#25d366;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    text-decoration:none;
+    box-shadow:0 10px 30px rgba(37,211,102,.35);
+    transition:.25s;
+}
+
+.whatsapp:hover{
+    transform:scale(1.08);
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+    background:#020617;
+    padding:50px 7%;
+    text-align:center;
+    color:#64748b;
+}
+
+footer strong{
+    color:var(--verde);
+    font-size:22px;
+}
+
+footer p{
+    margin-top:10px;
+    font-size:13px;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+    position:fixed;
+    right:20px;
+    top:80px;
+    z-index:5000;
+    background:var(--card);
+    color:var(--texto);
+    border:1px solid var(--borda);
+    padding:14px 18px;
+    border-radius:12px;
+    box-shadow:var(--sombra);
+    transform:translateX(150%);
+    transition:.3s;
+}
+
+.toast.show{
+    transform:translateX(0);
+}
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+@media(max-width:1000px){
+
+    .dashboard-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .perfil-layout{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:800px){
+
+    nav{
+        padding:13px 5%;
+    }
+
+    .menu{
+        display:none;
+        position:absolute;
+        top:66px;
+        left:0;
+        width:100%;
+        background:var(--fundo);
+        flex-direction:column;
+        padding:20px;
+        border-bottom:1px solid var(--borda);
+    }
+
+    .menu.ativo{
+        display:flex;
+    }
+
+    .menu-btn{
+        display:block;
+    }
+
+    .nav-actions{
+        margin-left:auto;
+        margin-right:10px;
+    }
+
+    .hero{
+        min-height:600px;
+        padding:60px 7%;
+    }
+
+    .hero h1{
+        font-size:45px;
+    }
+
+    .titulo h2{
+        font-size:30px;
+    }
+
+    .form-grid,
+    .diario-grid,
+    .principios{
+        grid-template-columns:1fr;
+    }
+
+    .estatisticas{
+        grid-template-columns:1fr;
+    }
+
+    .dashboard-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+
+@media(max-width:520px){
+
+    section{
+        padding:60px 5%;
+    }
+
+    .dashboard-grid{
+        grid-template-columns:1fr;
+    }
+
+    .auth-box{
+        padding:25px 20px;
+    }
+
+    .hero-buttons .btn{
+        width:100%;
+    }
+
+    .hero h1{
+        font-size:39px;
+    }
+
+    .exercicio{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     LOGIN / CADASTRO
+========================================================= -->
+
+<div class="auth-screen" id="authScreen">
+
+    <div class="auth-box">
+
+        <div class="auth-logo">
+            FIT<span>LIFE</span>
+        </div>
+
+        <p class="auth-subtitle">
+            Seu espaço pessoal de saúde, treino e bem-estar.
+        </p>
+
+        <div class="auth-tabs">
+
+            <button
+                id="tabLogin"
+                class="active"
+                onclick="mostrarAuth('login')">
+                Entrar
+            </button>
+
+            <button
+                id="tabCadastro"
+                onclick="mostrarAuth('cadastro')">
+                Criar conta
+            </button>
+
+        </div>
+
+        <!-- LOGIN -->
+
+        <form
+            id="formLogin"
+            class="auth-form active"
+            onsubmit="login(event)">
+
+            <div class="auth-input">
+
+                <label>E-mail</label>
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="seu@email.com"
+                    required>
+
+            </div>
+
+            <div class="auth-input">
+
+                <label>Senha</label>
+
+                <input
+                    type="password"
+                    id="loginSenha"
+                    placeholder="Sua senha"
+                    required>
+
+            </div>
+
+            <div
+                class="auth-message"
+                id="loginMensagem">
+            </div>
+
+            <button class="btn btn-full">
+                Entrar no FitLife
+            </button>
+
+        </form>
+
+
+        <!-- CADASTRO -->
+
+        <form
+            id="formCadastro"
+            class="auth-form"
+            onsubmit="cadastrar(event)">
+
+            <div class="auth-input">
+
+                <label>Nome</label>
+
+                <input
+                    type="text"
+                    id="cadNome"
+                    placeholder="Seu nome"
+                    required>
+
+            </div>
+
+            <div class="auth-input">
+
+                <label>E-mail</label>
+
+                <input
+                    type="email"
+                    id="cadEmail"
+                    placeholder="seu@email.com"
+                    required>
+
+            </div>
+
+            <div class="auth-input">
+
+                <label>Senha</label>
+
+                <input
+                    type="password"
+                    id="cadSenha"
+                    minlength="4"
+                    placeholder="Mínimo de 4 caracteres"
+                    required>
+
+            </div>
+
+            <div
+                class="auth-message"
+                id="cadMensagem">
+            </div>
+
+            <button class="btn btn-full">
+                Criar minha conta
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     APP
+========================================================= -->
+
+<div id="app">
+
+<!-- NAV -->
+
+<nav>
+
+    <div class="logo">
+        FIT<span>LIFE</span>
+    </div>
+
+    <div
+        class="menu"
+        id="menu">
+
+        <a href="#inicio">Início</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#perfil">Perfil</a>
+        <a href="#peso">Peso</a>
+        <a href="#alimentacao">Alimentação</a>
+        <a href="#agua">Água</a>
+        <a href="#ficha">Treino</a>
+        <a href="#duvidas">Dúvidas</a>
+
+    </div>
+
+    <div class="nav-actions">
+
+        <button
+            class="icon-btn"
+            onclick="alternarTema()"
+            title="Alterar tema">
+            🌙
+        </button>
+
+        <button
+            class="icon-btn"
+            onclick="logout()"
+            title="Sair">
+            ⇥
+        </button>
+
+    </div>
+
+    <div
+        class="menu-btn"
+        onclick="abrirMenu()">
+        ☰
+    </div>
+
+</nav>
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section
+    class="hero"
+    id="inicio">
+
+    <div class="hero-content">
+
+        <div class="tag">
+            🏋️ SAÚDE • TREINO • NUTRIÇÃO
+        </div>
+
+        <h1>
+            Construa uma versão
+            <span>mais saudável</span>
+            de você.
+        </h1>
+
+        <p>
+            Organize seus treinos, acompanhe seu peso,
+            registre sua alimentação, controle sua água
+            e acompanhe suas metas em um só lugar.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a
+                href="#dashboard"
+                class="btn">
+                Abrir meu painel →
+            </a>
+
+            <a
+                href="#perfil"
+                class="btn btn-secundario">
+                Meu perfil
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     DASHBOARD
+========================================================= -->
+
+<section
+    class="dashboard"
+    id="dashboard">
+
+    <div class="dashboard-header">
+
+        <div>
+
+            <h2>
+                Olá, <span id="dashNome">Usuário</span> 👋
+            </h2>
+
+            <p>
+                Veja um resumo do seu progresso.
+            </p>
+
+        </div>
+
+        <button
+            class="btn btn-pequeno"
+            onclick="atualizarDashboard()">
+            Atualizar
+        </button>
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+
+            <div class="dash-icon">⚖️</div>
+
+            <h3 id="dashPeso">
+                0 kg
+            </h3>
+
+            <p>
+                Peso atual
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <div class="dash-icon">🎯</div>
+
+            <h3 id="dashMeta">
+                0 kg
+            </h3>
+
+            <p>
+                Meta de peso
+            </p>
+
+            <div class="progress">
+                <div
+                    class="progress-bar"
+                    id="progressMeta">
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <div class="dash-icon">💧</div>
+
+            <h3 id="dashAgua">
+                0 ml
+            </h3>
+
+            <p>
+                Água hoje
+            </p>
+
+            <div class="progress">
+                <div
+                    class="progress-bar"
+                    id="progressAgua">
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <div class="dash-icon">👟</div>
+
+            <h3 id="dashPassos">
+                0
+            </h3>
+
+            <p>
+                Passos hoje
+            </p>
+
+            <div class="progress">
+                <div
+                    class="progress-bar"
+                    id="progressPassos">
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     PERFIL
+========================================================= -->
+
+<section id="perfil">
+
+    <div class="titulo">
+
+        <small>MEU PERFIL</small>
+
+        <h2>
+            Seus dados pessoais
+        </h2>
+
+        <p>
+            Defina seus dados e a meta que deseja alcançar.
+        </p>
+
+    </div>
+
+
+    <div class="perfil-layout">
+
+        <div class="perfil-resumo">
+
+            <div
+                class="avatar"
+                id="avatar">
+                F
+            </div>
+
+            <h3 id="perfilNome">
+                Usuário
+            </h3>
+
+            <p id="perfilEmail">
+                -
+            </p>
+
+            <br>
+
+            <p>
+                Meta:
+                <strong id="perfilMeta">
+                    -
+                </strong>
+            </p>
+
+        </div>
+
+
+        <div class="app-card">
+
+            <div class="form-grid">
+
+                <div class="campo">
+
+                    <label>
+                        Nome
+                    </label>
+
+                    <input
+                        id="perfilNomeInput"
+                        type="text">
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label>
+                        Idade
+                    </label>
+
+                    <input
+                        id="perfilIdade"
+                        type="number"
+                        min="1"
+                        max="120">
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label>
+                        Altura (cm)
+                    </label>
+
+                    <input
+                        id="perfilAltura"
+                        type="number"
+                        min="50"
+                        max="250">
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label>
+                        Peso atual (kg)
+                    </label>
+
+                    <input
+                        id="perfilPeso"
+                        type="number"
+                        step="0.1">
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label>
+                        Meta de peso (kg)
+                    </label>
+
+                    <input
+                        id="perfilMetaInput"
+                        type="number"
+                        step="0.1">
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label>
+                        Meta diária de água (ml)
+                    </label>
+
+                    <input
+                        id="perfilAguaMeta"
+                        type="number"
+                        value="2000">
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label>
+                        Meta diária de passos
+                    </label>
+
+                    <input
+                        id="perfilPassosMeta"
+                        type="number"
+                        value="8000">
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <button
+                class="btn"
+                onclick="salvarPerfil()">
+                💾 Salvar perfil
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     ACOMPANHAMENTO DE PESO
+========================================================= -->
+
+<section id="peso">
+
+    <div class="titulo">
+
+        <small>PROGRESSO</small>
+
+        <h2>
+            Acompanhamento de peso
+        </h2>
+
+        <p>
+            Registre suas pesagens e acompanhe sua evolução.
+        </p>
+
+    </div>
+
+
+    <div class="app-card">
+
+        <div class="form-grid">
+
+            <div class="campo">
+
+                <label>
+                    Peso registrado (kg)
+                </label>
+
+                <input
+                    type="number"
+                    id="novoPeso"
+                    step="0.1"
+                    placeholder="Ex: 72.5">
+
+            </div>
+
+            <div class="campo">
+
+                <label>
+                    Data
+                </label>
+
+                <input
+                    type="date"
+                    id="dataPeso">
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <button
+            class="btn"
+            onclick="registrarPeso()">
+            + Registrar peso
+        </button>
+
+
+        <div
+            class="tabela-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Data</th>
+                        <th>Peso</th>
+                        <th>Variação</th>
+                        <th>Ação</th>
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="historicoPeso">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     ALIMENTAÇÃO
+========================================================= -->
+
+<section id="alimentacao">
+
+    <div class="titulo">
+
+        <small>DIÁRIO</small>
+
+        <h2>
+            Diário de alimentação
+        </h2>
+
+        <p>
+            Registre suas refeições e mantenha uma visão
+            organizada da sua alimentação.
+        </p>
+
+    </div>
+
+
+    <div class="diario-grid">
+
+        <div class="app-card">
+
+            <h3>
+                🍽️ Adicionar refeição
+            </h3>
+
+            <br>
+
+            <div class="campo">
+
+                <label>
+                    Refeição
+                </label>
+
+                <select id="tipoRefeicao">
+
+                    <option>Café da manhã</option>
+                    <option>Lanche da manhã</option>
+                    <option>Almoço</option>
+                    <option>Lanche da tarde</option>
+                    <option>Jantar</option>
+                    <option>Ceia</option>
+
+                </select>
+
+            </div>
+
+            <br>
+
+            <div class="campo">
+
+                <label>
+                    Alimentos
+                </label>
+
+                <textarea
+                    id="alimentos"
+                    rows="4"
+                    placeholder="Ex: arroz, feijão, frango e salada">
+                </textarea>
+
+            </div>
+
+            <br>
+
+            <div class="campo">
+
+                <label>
+                    Observações
+                </label>
+
+                <textarea
+                    id="obsAlimentacao"
+                    rows="3"
+                    placeholder="Opcional">
+                </textarea>
+
+            </div>
+
+            <br>
+
+            <button
+                class="btn"
+                onclick="registrarAlimentacao()">
+                + Adicionar ao diário
+            </button>
+
+        </div>
+
+
+        <div class="app-card">
+
+            <h3>
+                📖 Refeições registradas
+            </h3>
+
+            <div
+                class="lista-registros"
+                id="listaAlimentacao">
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     ÁGUA
+========================================================= -->
+
+<section id="agua">
+
+    <div class="titulo">
+
+        <small>HIDRATAÇÃO</small>
+
+        <h2>
+            Controle de água
+        </h2>
+
+        <p>
+            Registre sua ingestão diária de água.
+        </p>
+
+    </div>
+
+
+    <div class="app-card water-box">
+
+        <div
+            class="water-number"
+            id="aguaAtual">
+            0 ml
+        </div>
+
+        <p id="aguaMetaTexto">
+            Meta: 2000 ml
+        </p>
+
+        <div
+            class="progress"
+            style="max-width:500px;margin:20px auto">
+
+            <div
+                class="progress-bar"
+                id="aguaProgress">
+            </div>
+
+        </div>
+
+
+        <div
+            class="water-glasses"
+            id="copos">
+        </div>
+
+
+        <button
+            class="btn"
+            onclick="adicionarAgua(250)">
+            💧 +250 ml
+        </button>
+
+        <button
+            class="btn btn-secundario"
+            onclick="adicionarAgua(-250)">
+            −250 ml
+        </button>
+
+        <button
+            class="btn btn-perigo"
+            onclick="zerarAgua()">
+            Limpar
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FICHA DE TREINO
+========================================================= -->
+
+<section id="ficha">
+
+    <div class="titulo">
+
+        <small>MEU TREINO</small>
+
+        <h2>
+            Ficha de treino
+        </h2>
+
+        <p>
+            Crie sua ficha e marque os exercícios concluídos.
+        </p>
+
+    </div>
+
+
+    <div class="app-card">
+
+        <div class="form-grid">
+
+            <div class="campo">
+
+                <label>
+                    Dia / Treino
+                </label>
+
+                <select id="treinoDia">
+
+                    <option>Treino A — Peito e Tríceps</option>
+                    <option>Treino B — Costas e Bíceps</option>
+                    <option>Treino C — Pernas</option>
+                    <option>Treino D — Ombros</option>
+                    <option>Treino E — Cardio</option>
+
+                </select>
+
+            </div>
+
+            <div class="campo">
+
+                <label>
+                    Exercício
+                </label>
+
+                <input
+                    id="nomeExercicio"
+                    placeholder="Ex: Supino reto">
+
+            </div>
+
+            <div class="campo">
+
+                <label>
+                    Séries
+                </label>
+
+                <input
+                    id="seriesExercicio"
+                    placeholder="Ex: 3">
+
+            </div>
+
+            <div class="campo">
+
+                <label>
+                    Repetições / tempo
+                </label>
+
+                <input
+                    id="repsExercicio"
+                    placeholder="Ex: 10–12">
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <button
+            class="btn"
+            onclick="adicionarExercicio()">
+            + Adicionar exercício
+        </button>
+
+
+        <div
+            class="treino"
+            id="fichaTreinoLista">
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     PASSOS
+========================================================= -->
+
+<section id="passos">
+
+    <div class="titulo">
+
+        <small>ATIVIDADE</small>
+
+        <h2>
+            Contador de passos
+        </h2>
+
+        <p>
+            Registre seus passos do dia e acompanhe sua meta.
+        </p>
+
+    </div>
+
+
+    <div class="app-card water-box">
+
+        <div
+            class="water-number"
+            style="color:var(--verde)"
+            id="passosAtual">
+            0
+        </div>
+
+        <p id="passosMetaTexto">
+            Meta: 8.000 passos
+        </p>
+
+        <div
+            class="progress"
+            style="max-width:500px;margin:20px auto">
+
+            <div
+                class="progress-bar"
+                id="passosProgress">
+            </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="campo">
+
+                <label>
+                    Adicionar passos
+                </label>
+
+                <input
+                    type="number"
+                    id="passosInput"
+                    placeholder="Ex: 1000">
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <button
+            class="btn"
+            onclick="adicionarPassos()">
+            👟 Adicionar passos
+        </button>
+
+        <button
+            class="btn btn-secundario"
+            onclick="zerarPassos()">
+            Zerar hoje
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SAÚDE
+========================================================= -->
+
+<section id="saude">
+
+    <div class="titulo">
+
+        <small>POR QUE TREINAR?</small>
+
+        <h2>
+            Academia também é saúde
+        </h2>
+
+        <p>
+            A atividade física pode contribuir para saúde
+            cardiovascular, força, bem-estar e qualidade de vida.
+        </p>
+
+    </div>
+
+
+    <div class="saude-grid">
+
+        <div class="saude-card">
+            <div class="icone">❤️</div>
+            <h3>Coração</h3>
+            <p>
+                A atividade física regular contribui para a saúde
+                cardiovascular.
+            </p>
+        </div>
+
+        <div class="saude-card">
+            <div class="icone">🧠</div>
+            <h3>Saúde mental</h3>
+            <p>
+                Exercícios podem contribuir para o bem-estar
+                e qualidade do sono.
+            </p>
+        </div>
+
+        <div class="saude-card">
+            <div class="icone">💪</div>
+            <h3>Força muscular</h3>
+            <p>
+                Exercícios de fortalecimento ajudam a desenvolver
+                e manter a capacidade muscular.
+            </p>
+        </div>
+
+        <div class="saude-card">
+            <div class="icone">🦴</div>
+            <h3>Ossos</h3>
+            <p>
+                Atividades físicas também fazem parte de uma
+                rotina que favorece a saúde óssea e funcional.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     ESTATÍSTICAS
+========================================================= -->
+
+<section class="estatisticas">
+
+    <div>
+        <div class="numero">150–300</div>
+        <p>
+            minutos semanais de atividade aeróbica moderada
+            para adultos
+        </p>
+    </div>
+
+    <div>
+        <div class="numero">2+</div>
+        <p>
+            dias por semana de fortalecimento muscular
+        </p>
+    </div>
+
+    <div>
+        <div class="numero">24h</div>
+        <p>
+            Cada dia é uma nova oportunidade para se movimentar
+        </p>
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SUPLEMENTOS
+========================================================= -->
+
+<section id="suplementos">
+
+    <div class="titulo">
+
+        <small>NUTRIÇÃO</small>
+
+        <h2>
+            Conheça os suplementos
+        </h2>
+
+        <p>
+            Suplementos são complementos e não substituem
+            alimentação, treinamento e descanso.
+        </p>
+
+    </div>
+
+
+    <div class="suplementos-grid">
+
+        <div class="suplemento">
+
+            <img src="https://images.unsplash.com/photo-1593095948071-474c5cc2989d?auto=format&fit=crop&w=900&q=85">
+
+            <div class="suplemento-info">
+
+                <span class="badge">PROTEÍNA</span>
+
+                <h3>Whey Protein</h3>
+
+                <p>
+                    Proteína derivada do soro do leite que pode
+                    complementar a ingestão diária de proteínas.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="suplemento">
+
+            <img src="https://images.unsplash.com/photo-1598971639058-fab3c3109a00?auto=format&fit=crop&w=900&q=85">
+
+            <div class="suplemento-info">
+
+                <span class="badge">DESEMPENHO</span>
+
+                <h3>Creatina</h3>
+
+                <p>
+                    Substância bastante estudada em exercícios
+                    de força e esforços de alta intensidade.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="suplemento">
+
+            <img src="https://images.unsplash.com/photo-1512568400610-62da28bc8a13?auto=format&fit=crop&w=900&q=85">
+
+            <div class="suplemento-info">
+
+                <span class="badge">ESTIMULANTE</span>
+
+                <h3>Cafeína</h3>
+
+                <p>
+                    Substância estimulante encontrada no café
+                    e em outros produtos.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="suplemento">
+
+            <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=900&q=85">
+
+            <div class="suplemento-info">
+
+                <span class="badge">AMINOÁCIDOS</span>
+
+                <h3>BCAA</h3>
+
+                <p>
+                    Aminoácidos de cadeia ramificada presentes
+                    naturalmente em alimentos ricos em proteínas.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="suplemento">
+
+            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85">
+
+            <div class="suplemento-info">
+
+                <span class="badge">ENERGIA</span>
+
+                <h3>Hipercalórico</h3>
+
+                <p>
+                    Produto com alta quantidade de calorias que
+                    pode complementar a ingestão energética.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="suplemento">
+
+            <img src="https://images.unsplash.com/photo-1550572017-edd951b55104?auto=format&fit=crop&w=900&q=85">
+
+            <div class="suplemento-info">
+
+                <span class="badge">VITAMINAS</span>
+
+                <h3>Multivitamínico</h3>
+
+                <p>
+                    Combinação de vitaminas e minerais que não
+                    substitui uma alimentação equilibrada.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CALCULADORA IMC
+========================================================= -->
+
+<section id="calculadora">
+
+    <div class="titulo">
+
+        <small>DESCUBRA MAIS</small>
+
+        <h2>
+            Conheça seu indicador corporal
+        </h2>
+
+        <p>
+            Informe seus dados para calcular o IMC.
+        </p>
+
+    </div>
+
+
+    <div class="app-card">
+
+        <div class="form-grid">
+
+            <div class="campo">
+
+                <label>Idade</label>
+
+                <input
+                    type="number"
+                    id="idade"
+                    placeholder="Ex: 25">
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Sexo</label>
+
+                <select id="sexo">
+
+                    <option value="nao">
+                        Prefiro não informar
+                    </option>
+
+                    <option value="feminino">
+                        Feminino
+                    </option>
+
+                    <option value="masculino">
+                        Masculino
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Altura (cm)</label>
+
+                <input
+                    type="number"
+                    id="altura"
+                    placeholder="Ex: 175">
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Peso (kg)</label>
+
+                <input
+                    type="number"
+                    id="peso"
+                    placeholder="Ex: 70">
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <button
+            class="btn"
+            onclick="calcularIMC()">
+            Calcular meu IMC
+        </button>
+
+
+        <div
+            class="app-card"
+            id="resultadoIMC"
+            style="display:none;margin-top:20px">
+
+            <h3
+                id="tituloResultado"
+                style="color:var(--verde)">
+                Resultado
+            </h3>
+
+            <p id="textoResultado"></p>
+
+            <div class="progress">
+
+                <div
+                    class="progress-bar"
+                    id="barra">
+                </div>
+
+            </div>
+
+            <p
+                id="faixaPeso"
+                style="margin-top:15px;color:var(--cinza)">
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     OBJETIVOS
+========================================================= -->
+
+<section>
+
+    <div class="titulo">
+
+        <small>PERSONALIZE</small>
+
+        <h2>
+            Qual é o seu objetivo?
+        </h2>
+
+    </div>
+
+
+    <div class="objetivos">
+
+        <div
+            class="objetivo"
+            onclick="selecionarObjetivo('hipertrofia',this)"
+            style="padding:25px;text-align:center;cursor:pointer">
+
+            <div class="icone">💪</div>
+            <h3>Hipertrofia</h3>
+            <p>Desenvolvimento muscular</p>
+
+        </div>
+
+
+        <div
+            class="objetivo"
+            onclick="selecionarObjetivo('emagrecimento',this)"
+            style="padding:25px;text-align:center;cursor:pointer">
+
+            <div class="icone">🔥</div>
+            <h3>Emagrecimento</h3>
+            <p>Mais movimento e condicionamento</p>
+
+        </div>
+
+
+        <div
+            class="objetivo"
+            onclick="selecionarObjetivo('forca',this)"
+            style="padding:25px;text-align:center;cursor:pointer">
+
+            <div class="icone">🏋️</div>
+            <h3>Força</h3>
+            <p>Desenvolvimento de força</p>
+
+        </div>
+
+
+        <div
+            class="objetivo"
+            onclick="selecionarObjetivo('cardio',this)"
+            style="padding:25px;text-align:center;cursor:pointer">
+
+            <div class="icone">❤️</div>
+            <h3>Condicionamento</h3>
+            <p>Resistência cardiovascular</p>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="treino"
+        id="treinoResultado"
+        style="display:none">
+
+        <h3
+            id="nomeTreino"
+            style="color:var(--verde)">
+            Seu treino
+        </h3>
+
+        <div id="listaExercicios"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     PRINCÍPIOS
+========================================================= -->
+
+<section>
+
+    <div class="principios">
+
+        <img
+            src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=1200&q=90"
+            alt="Pessoa treinando em academia">
+
+
+        <div>
+
+            <div class="titulo"
+                 style="text-align:left;margin-bottom:30px">
+
+                <small>MAIS IMPORTANTE</small>
+
+                <h2>
+                    Suplemento não faz tudo sozinho.
+                </h2>
+
+            </div>
+
+
+            <ul class="lista">
+
+                <li>
+                    Treinamento consistente é fundamental
+                    para alcançar resultados.
+                </li>
+
+                <li>
+                    Uma alimentação equilibrada deve ser
+                    a base da rotina.
+                </li>
+
+                <li>
+                    O descanso também faz parte do processo.
+                </li>
+
+                <li>
+                    Suplementos podem complementar a dieta,
+                    mas não substituem refeições.
+                </li>
+
+                <li>
+                    Cada pessoa possui necessidades diferentes.
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FAQ
+========================================================= -->
+
+<section id="duvidas">
+
+    <div class="titulo">
+
+        <small>PERGUNTAS FREQUENTES</small>
+
+        <h2>
+            Você perguntou, o FitLife responde
+        </h2>
+
+    </div>
+
+
+    <div class="faq">
+
+        <div class="pergunta">
+
+            <button onclick="abrirPergunta(this)">
+                O whey é obrigatório para ganhar músculos?
+                <span>＋</span>
+            </button>
+
+            <div class="resposta">
+                Não. O whey é uma fonte de proteína e pode
+                complementar a alimentação quando necessário.
+            </div>
+
+        </div>
+
+
+        <div class="pergunta">
+
+            <button onclick="abrirPergunta(this)">
+                Creatina substitui o treino?
+                <span>＋</span>
+            </button>
+
+            <div class="resposta">
+                Não. A creatina é um suplemento e não substitui
+                treinamento, alimentação ou descanso.
+            </div>
+
+        </div>
+
+
+        <div class="pergunta">
+
+            <button onclick="abrirPergunta(this)">
+                Preciso tomar suplementos para frequentar a academia?
+                <span>＋</span>
+            </button>
+
+            <div class="resposta">
+                Não. Uma pessoa pode praticar atividade física
+                sem utilizar suplementos.
+            </div>
+
+        </div>
+
+
+        <div class="pergunta">
+
+            <button onclick="abrirPergunta(this)">
+                Existe um peso ideal?
+                <span>＋</span>
+            </button>
+
+            <div class="resposta">
+                Não existe um único número que seja ideal para
+                todas as pessoas.
+            </div>
+
+        </div>
+
+
+        <div class="pergunta">
+
+            <button onclick="abrirPergunta(this)">
+                Posso começar qualquer exercício sozinho?
+                <span>＋</span>
+            </button>
+
+            <div class="resposta">
+                É importante aprender a técnica dos exercícios
+                e respeitar seus limites.
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    <strong>FITLIFE</strong>
+
+    <p>
+        Saúde • Treino • Alimentação • Bem-estar
+    </p>
+
+    <p>
+        ⚠️ Conteúdo educativo. Não substitui avaliação
+        médica, nutricional ou orientação profissional.
+    </p>
+
+    <p>
+        © 2026 FitLife
+    </p>
+
+</footer>
+
+
+<!-- WHATSAPP -->
+
+<a
+    class="whatsapp"
+    id="whatsappButton"
+    href="#"
+    target="_blank"
+    title="Fale conosco">
+    ☎
+</a>
+
+
+<!-- TOAST -->
+
+<div
+    class="toast"
+    id="toast">
+</div>
+
+
+<script>
+
+/* =========================================================
+   CONFIGURAÇÃO
+========================================================= */
+
+/*
+   COLOQUE AQUI O SEU NÚMERO DE WHATSAPP.
+
+   Exemplo:
+   const WHATSAPP = "5531999999999";
+*/
+
+const WHATSAPP = "SEU_NUMERO_AQUI";
+
+
+/* =========================================================
+   BANCO DE DADOS LOCAL
+========================================================= */
+
+let usuarios =
+    JSON.parse(localStorage.getItem("fitlife_usuarios")) || {};
+
+let usuarioAtual =
+    localStorage.getItem("fitlife_usuario_atual");
+
+
+function salvarUsuarios(){
+
+    localStorage.setItem(
+        "fitlife_usuarios",
+        JSON.stringify(usuarios)
+    );
+
+}
+
+
+function dadosUsuario(){
+
+    if(!usuarioAtual) return null;
+
+    return usuarios[usuarioAtual];
+
+}
+
+
+function salvarDadosUsuario(){
+
+    if(!usuarioAtual) return;
+
+    localStorage.setItem(
+        "fitlife_usuarios",
+        JSON.stringify(usuarios)
+    );
+
+}
+
+
+/* =========================================================
+   AUTENTICAÇÃO
+========================================================= */
+
+function mostrarAuth(tipo){
+
+    document
+        .getElementById("formLogin")
+        .classList.toggle("active",tipo==="login");
+
+    document
+        .getElementById("formCadastro")
+        .classList.toggle("active",tipo==="cadastro");
+
+    document
+        .getElementById("tabLogin")
+        .classList.toggle("active",tipo==="login");
+
+    document
+        .getElementById("tabCadastro")
+        .classList.toggle("active",tipo==="cadastro");
+
+}
+
+
+function cadastrar(event){
+
+    event.preventDefault();
+
+    const nome =
+        document.getElementById("cadNome").value.trim();
+
+    const email =
+        document.getElementById("cadEmail").value.trim().toLowerCase();
+
+    const senha =
+        document.getElementById("cadSenha").value;
+
+    const mensagem =
+        document.getElementById("cadMensagem");
+
+
+    if(usuarios[email]){
+
+        mensagem.textContent =
+            "Este e-mail já possui uma conta.";
+
+        return;
+
+    }
+
+
+    usuarios[email] = {
+
+        nome:nome,
+        email:email,
+        senha:senha,
+
+        idade:"",
+        altura:"",
+        peso:"",
+        metaPeso:"",
+
+        aguaMeta:2000,
+        aguaHoje:0,
+        aguaData:hoje(),
+
+        passosMeta:8000,
+        passosHoje:0,
+        passosData:hoje(),
+
+        pesos:[],
+        alimentacao:[],
+        treinos:[]
+
+    };
+
+
+    salvarUsuarios();
+
+    usuarioAtual = email;
+
+    localStorage.setItem(
+        "fitlife_usuario_atual",
+        email
+    );
+
+    entrarNoApp();
+
+}
+
+
+function login(event){
+
+    event.preventDefault();
+
+    const email =
+        document.getElementById("loginEmail")
+        .value.trim()
+        .toLowerCase();
+
+    const senha =
+        document.getElementById("loginSenha")
+        .value;
+
+    const mensagem =
+        document.getElementById("loginMensagem");
+
+
+    if(!usuarios[email] ||
+       usuarios[email].senha !== senha){
+
+        mensagem.textContent =
+            "E-mail ou senha incorretos.";
+
+        return;
+
+    }
+
+
+    usuarioAtual = email;
+
+    localStorage.setItem(
+        "fitlife_usuario_atual",
+        email
+    );
+
+    entrarNoApp();
+
+}
+
+
+function logout(){
+
+    localStorage.removeItem(
+        "fitlife_usuario_atual"
+    );
+
+    usuarioAtual = null;
+
+    document
+        .getElementById("app")
+        .classList.remove("visible");
+
+    document
+        .getElementById("authScreen")
+        .classList.remove("hidden");
+
+}
+
+
+/* =========================================================
+   ENTRAR NO APP
+========================================================= */
+
+function entrarNoApp(){
+
+    document
+        .getElementById("authScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("app")
+        .classList.add("visible");
+
+
+    carregarPerfil();
+
+    prepararData();
+
+    atualizarDashboard();
+
+    renderizarPesos();
+
+    renderizarAlimentacao();
+
+    renderizarTreino();
+
+    renderizarAgua();
+
+    renderizarPassos();
+
+}
+
+
+/* =========================================================
+   DATA
+========================================================= */
+
+function hoje(){
+
+    const d = new Date();
+
+    const ano =
+        d.getFullYear();
+
+    const mes =
+        String(d.getMonth()+1)
+        .padStart(2,"0");
+
+    const dia =
+        String(d.getDate())
+        .padStart(2,"0");
+
+    return `${ano}-${mes}-${dia}`;
+
+}
+
+
+function prepararData(){
+
+    document
+        .getElementById("dataPeso")
+        .value = hoje();
+
+}
+
+
+/* =========================================================
+   PERFIL
+========================================================= */
+
+function carregarPerfil(){
+
+    const u =
+        dadosUsuario();
+
+    if(!u) return;
+
+
+    document
+        .getElementById("dashNome")
+        .textContent =
+        u.nome || "Usuário";
+
+
+    document
+        .getElementById("perfilNome")
+        .textContent =
+        u.nome || "Usuário";
+
+
+    document
+        .getElementById("perfilEmail")
+        .textContent =
+        u.email || "";
+
+
+    document
+        .getElementById("avatar")
+        .textContent =
+        (u.nome || "U")
+        .charAt(0)
+        .toUpperCase();
+
+
+    document
+        .getElementById("perfilMeta")
+        .textContent =
+        u.metaPeso
+        ? u.metaPeso + " kg"
+        : "-";
+
+
+    document
+        .getElementById("perfilNomeInput")
+        .value =
+        u.nome || "";
+
+
+    document
+        .getElementById("perfilIdade")
+        .value =
+        u.idade || "";
+
+
+    document
+        .getElementById("perfilAltura")
+        .value =
+        u.altura || "";
+
+
+    document
+        .getElementById("perfilPeso")
+        .value =
+        u.peso || "";
+
+
+    document
+        .getElementById("perfilMetaInput")
+        .value =
+        u.metaPeso || "";
+
+
+    document
+        .getElementById("perfilAguaMeta")
+        .value =
+        u.aguaMeta || 2000;
+
+
+    document
+        .getElementById("perfilPassosMeta")
+        .value =
+        u.passosMeta || 8000;
+
+}
+
+
+function salvarPerfil(){
+
+    const u =
+        dadosUsuario();
+
+
+    u.nome =
+        document.getElementById("perfilNomeInput").value.trim();
+
+    u.idade =
+        Number(document.getElementById("perfilIdade").value);
+
+    u.altura =
+        Number(document.getElementById("perfilAltura").value);
+
+    u.peso =
+        Number(document.getElementById("perfilPeso").value);
+
+    u.metaPeso =
+        Number(document.getElementById("perfilMetaInput").value);
+
+    u.aguaMeta =
+        Number(document.getElementById("perfilAguaMeta").value) || 2000;
+
+    u.passosMeta =
+        Number(document.getElementById("perfilPassosMeta").value) || 8000;
+
+
+    salvarDadosUsuario();
+
+    carregarPerfil();
+
+    atualizarDashboard();
+
+    mostrarToast("Perfil atualizado com sucesso!");
+
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function atualizarDashboard(){
+
+    const u =
+        dadosUsuario();
+
+    if(!u) return;
+
+
+    document
+        .getElementById("dashNome")
+        .textContent =
+        u.nome || "Usuário";
+
+
+    document
+        .getElementById("dashPeso")
+        .textContent =
+        (u.peso || 0) + " kg";
+
+
+    document
+        .getElementById("dashMeta")
+        .textContent =
+        (u.metaPeso || 0) + " kg";
+
+
+    document
+        .getElementById("dashAgua")
+        .textContent =
+        (u.aguaHoje || 0) + " ml";
+
+
+    document
+        .getElementById("dashPassos")
+        .textContent =
+        formatarNumero(u.passosHoje || 0);
+
+
+    const metaAgua =
+        Number(u.aguaMeta) || 2000;
+
+
+    const porcentagemAgua =
+        Math.min(
+            ((u.aguaHoje || 0) / metaAgua) * 100,
+            100
+        );
+
+
+    document
+        .getElementById("progressAgua")
+        .style.width =
+        porcentagemAgua + "%";
+
+
+    const metaPassos =
+        Number(u.passosMeta) || 8000;
+
+
+    const porcentagemPassos =
+        Math.min(
+            ((u.passosHoje || 0) / metaPassos) * 100,
+            100
+        );
+
+
+    document
+        .getElementById("progressPassos")
+        .style.width =
+        porcentagemPassos + "%";
+
+
+    let progressoPeso = 0;
+
+
+    if(u.peso && u.metaPeso){
+
+        const historico =
+            u.pesos || [];
+
+        if(historico.length){
+
+            const primeiro =
+                Number(historico[0].peso);
+
+            const atual =
+                Number(u.peso);
+
+            const meta =
+                Number(u.metaPeso);
+
+
+            if(primeiro !== meta){
+
+                progressoPeso =
+                    ((primeiro - atual) /
+                    (primeiro - meta)) * 100;
+
+            }
+
+        }
+
+    }
+
+
+    progressoPeso =
+        Math.max(
+            0,
+            Math.min(100,progressoPeso)
+        );
+
+
+    document
+        .getElementById("progressMeta")
+        .style.width =
+        progressoPeso + "%";
+
+}
+
+
+/* =========================================================
+   PESO
+========================================================= */
+
+function registrarPeso(){
+
+    const u =
+        dadosUsuario();
+
+
+    const peso =
+        Number(
+            document
+            .getElementById("novoPeso")
+            .value
+        );
+
+
+    const data =
+        document
+        .getElementById("dataPeso")
+        .value;
+
+
+    if(!peso || !data){
+
+        mostrarToast(
+            "Informe peso e data."
+        );
+
+        return;
+
+    }
+
+
+    if(!u.pesos)
+        u.pesos = [];
+
+
+    u.pesos.push({
+
+        peso:peso,
+        data:data
+
+    });
+
+
+    u.peso =
+        peso;
+
+
+    salvarDadosUsuario();
+
+    document
+        .getElementById("novoPeso")
+        .value = "";
+
+
+    renderizarPesos();
+
+    carregarPerfil();
+
+    atualizarDashboard();
+
+    mostrarToast(
+        "Peso registrado!"
+    );
+
+}
+
+
+function renderizarPesos(){
+
+    const u =
+        dadosUsuario();
+
+    if(!u) return;
+
+
+    const tabela =
+        document
+        .getElementById("historicoPeso");
+
+
+    tabela.innerHTML = "";
+
+
+    const registros =
+        [...(u.pesos || [])]
+        .sort(
+            (a,b) =>
+            new Date(b.data) -
+            new Date(a.data)
+        );
+
+
+    registros.forEach(
+        (registro,index) => {
+
+            const anterior =
+                registros[index+1]
+                ? Number(registros[index+1].peso)
+                : null;
+
+
+            let variacao = "—";
+
+
+            if(anterior !== null){
+
+                const valor =
+                    Number(registro.peso) -
+                    anterior;
+
+                variacao =
+                    (valor > 0 ? "+" : "") +
+                    valor.toFixed(1) +
+                    " kg";
+
+            }
+
+
+            const tr =
+                document.createElement("tr");
+
+
+            tr.innerHTML = `
+
+                <td>
+                    ${formatarData(registro.data)}
+                </td>
+
+                <td>
+                    <strong>
+                        ${Number(registro.peso).toFixed(1)} kg
+                    </strong>
+                </td>
+
+                <td>
+                    ${variacao}
+                </td>
+
+                <td>
+                    <button
+                        class="btn btn-perigo btn-pequeno"
+                        onclick="excluirPeso('${registro.data}',${registro.peso})">
+                        Excluir
+                    </button>
+                </td>
+
+            `;
+
+
+            tabela.appendChild(tr);
+
+        }
+    );
+
+}
+
+
+function excluirPeso(data,peso){
+
+    const u =
+        dadosUsuario();
+
+
+    const indice =
+        u.pesos.findIndex(
+            p =>
+            p.data === data &&
+            Number(p.peso) === Number(peso)
+        );
+
+
+    if(indice >= 0){
+
+        u.pesos.splice(indice,1);
+
+        const ultimo =
+            [...u.pesos]
+            .sort(
+                (a,b) =>
+                new Date(b.data) -
+                new Date(a.data)
+            )[0];
+
+
+        u.peso =
+            ultimo
+            ? ultimo.peso
+            : "";
+
+
+        salvarDadosUsuario();
+
+        renderizarPesos();
+
+        carregarPerfil();
+
+        atualizarDashboard();
+
+    }
+
+}
+
+
+/* =========================================================
+   ALIMENTAÇÃO
+========================================================= */
+
+function registrarAlimentacao(){
+
+    const u =
+        dadosUsuario();
+
+
+    const tipo =
+        document
+        .getElementById("tipoRefeicao")
+        .value;
+
+
+    const alimentos =
+        document
+        .getElementById("alimentos")
+        .value.trim();
+
+
+    const observacao =
+        document
+        .getElementById("obsAlimentacao")
+        .value.trim();
+
+
+    if(!alimentos){
+
+        mostrarToast(
+            "Informe os alimentos."
+        );
+
+        return;
+
+    }
+
+
+    if(!u.alimentacao)
+        u.alimentacao = [];
+
+
+    u.alimentacao.unshift({
+
+        id:Date.now(),
+
+        data:hoje(),
+
+        tipo:tipo,
+
+        alimentos:alimentos,
+
+        observacao:observacao
+
+    });
+
+
+    salvarDadosUsuario();
+
+
+    document
+        .getElementById("alimentos")
+        .value = "";
+
+
+    document
+        .getElementById("obsAlimentacao")
+        .value = "";
+
+
+    renderizarAlimentacao();
+
+    mostrarToast(
+        "Refeição adicionada!"
+    );
+
+}
+
+
+function renderizarAlimentacao(){
+
+    const u =
+        dadosUsuario();
+
+    if(!u) return;
+
+
+    const lista =
+        document
+        .getElementById("listaAlimentacao");
+
+
+    lista.innerHTML = "";
+
+
+    const registros =
+        u.alimentacao || [];
+
+
+    if(!registros.length){
+
+        lista.innerHTML =
+            "<p style='color:var(--cinza)'>Nenhuma refeição registrada.</p>";
+
+        return;
+
+    }
+
+
+    registros.forEach(registro => {
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "registro";
+
+
+        div.innerHTML = `
+
+            <div>
+
+                <strong>
+                    ${escapeHTML(registro.tipo)}
+                </strong>
+
+                <br>
+
+                <small>
+                    ${formatarData(registro.data)}
+                </small>
+
+                <p style="margin-top:7px;color:var(--cinza)">
+                    ${escapeHTML(registro.alimentos)}
+                </p>
+
+                ${
+                    registro.observacao
+                    ?
+                    `<small>${escapeHTML(registro.observacao)}</small>`
+                    :
+                    ""
+                }
+
+            </div>
+
+            <button
+                class="excluir"
+                onclick="excluirAlimentacao(${registro.id})">
+                ✕
+            </button>
+
+        `;
+
+
+        lista.appendChild(div);
+
+    });
+
+}
+
+
+function excluirAlimentacao(id){
+
+    const u =
+        dadosUsuario();
+
+
+    u.alimentacao =
+        u.alimentacao.filter(
+            item => item.id !== id
+        );
+
+
+    salvarDadosUsuario();
+
+    renderizarAlimentacao();
+
+}
+
+
+/* =========================================================
+   ÁGUA
+========================================================= */
+
+function verificarDiaAgua(){
+
+    const u =
+        dadosUsuario();
+
+
+    if(u.aguaData !== hoje()){
+
+        u.aguaData =
+            hoje();
+
+        u.aguaHoje =
+            0;
+
+        salvarDadosUsuario();
+
+    }
+
+}
+
+
+function adicionarAgua(valor){
+
+    const u =
+        dadosUsuario();
+
+
+    verificarDiaAgua();
+
+
+    u.aguaHoje =
+        Math.max(
+            0,
+            (u.aguaHoje || 0) + valor
+        );
+
+
+    salvarDadosUsuario();
+
+    renderizarAgua();
+
+    atualizarDashboard();
+
+}
+
+
+function zerarAgua(){
+
+    const u =
+        dadosUsuario();
+
+
+    u.aguaHoje =
+        0;
+
+
+    salvarDadosUsuario();
+
+    renderizarAgua();
+
+    atualizarDashboard();
+
+}
+
+
+function renderizarAgua(){
+
+    const u =
+        dadosUsuario();
+
+    if(!u) return;
+
+
+    verificarDiaAgua();
+
+
+    const meta =
+        Number(u.aguaMeta) || 2000;
+
+    const atual =
+        Number(u.aguaHoje) || 0;
+
+
+    document
+        .getElementById("aguaAtual")
+        .textContent =
+        atual + " ml";
+
+
+    document
+        .getElementById("aguaMetaTexto")
+        .textContent =
+        "Meta: " + meta + " ml";
+
+
+    const porcentagem =
+        Math.min(
+            (atual/meta)*100,
+            100
+        );
+
+
+    document
+        .getElementById("aguaProgress")
+        .style.width =
+        porcentagem + "%";
+
+
+    const copos =
+        document
+        .getElementById("copos");
+
+
+    copos.innerHTML = "";
+
+
+    const quantidade =
+        Math.ceil(meta/250);
+
+
+    const preenchidos =
+        Math.floor(atual/250);
+
+
+    for(
+        let i=0;
+        i<quantidade;
+        i++
+    ){
+
+        const botao =
+            document.createElement("button");
+
+
+        botao.className =
+            "glass " +
+            (i < preenchidos ? "active" : "");
+
+
+        botao.title =
+            "Copos de 250 ml";
+
+
+        botao.onclick =
+            () => {
+
+                u.aguaHoje =
+                    (i+1)*250;
+
+                salvarDadosUsuario();
+
+                renderizarAgua();
+
+                atualizarDashboard();
+
+            };
+
+
+        copos.appendChild(botao);
+
+    }
+
+}
+
+
+/* =========================================================
+   PASSOS
+========================================================= */
+
+function verificarDiaPassos(){
+
+    const u =
+        dadosUsuario();
+
+
+    if(u.passosData !== hoje()){
+
+        u.passosData =
+            hoje();
+
+        u.passosHoje =
+            0;
+
+        salvarDadosUsuario();
+
+    }
+
+}
+
+
+function adicionarPassos(){
+
+    const u =
+        dadosUsuario();
+
+
+    verificarDiaPassos();
+
+
+    const valor =
+        Number(
+            document
+            .getElementById("passosInput")
+            .value
+        );
+
+
+    if(!valor || valor < 1){
+
+        mostrarToast(
+            "Informe uma quantidade válida."
+        );
+
+        return;
+
+    }
+
+
+    u.passosHoje =
+        (u.passosHoje || 0) +
+        valor;
+
+
+    salvarDadosUsuario();
+
+
+    document
+        .getElementById("passosInput")
+        .value = "";
+
+
+    renderizarPassos();
+
+    atualizarDashboard();
+
+}
+
+
+function zerarPassos(){
+
+    const u =
+        dadosUsuario();
+
+
+    u.passosHoje =
+        0;
+
+
+    u.passosData =
+        hoje();
+
+
+    salvarDadosUsuario();
+
+    renderizarPassos();
+
+    atualizarDashboard();
+
+}
+
+
+function renderizarPassos(){
+
+    const u =
+        dadosUsuario();
+
+    if(!u) return;
+
+
+    verificarDiaPassos();
+
+
+    const atual =
+        Number(u.passosHoje) || 0;
+
+    const meta =
+        Number(u.passosMeta) || 8000;
+
+
+    document
+        .getElementById("passosAtual")
+        .textContent =
+        formatarNumero(atual);
+
+
+    document
+        .getElementById("passosMetaTexto")
+        .textContent =
+        "Meta: " +
+        formatarNumero(meta) +
+        " passos";
+
+
+    document
+        .getElementById("passosProgress")
+        .style.width =
+        Math.min(
+            (atual/meta)*100,
+            100
+        ) + "%";
+
+}
+
+
+/* =========================================================
+   FICHA DE TREINO
+========================================================= */
+
+function adicionarExercicio(){
+
+    const u =
+        dadosUsuario();
+
+
+    const dia =
+        document
+        .getElementById("treinoDia")
+        .value;
+
+
+    const nome =
+        document
+        .getElementById("nomeExercicio")
+        .value.trim();
+
+
+    const series =
+        document
+        .getElementById("seriesExercicio")
+        .value.trim();
+
+
+    const reps =
+        document
+        .getElementById("repsExercicio")
+        .value.trim();
+
+
+    if(!nome){
+
+        mostrarToast(
+            "Digite o nome do exercício."
+        );
+
+        return;
+
+    }
+
+
+    if(!u.treinos)
+        u.treinos = [];
+
+
+    u.treinos.push({
+
+        id:Date.now(),
+
+        dia:dia,
+
+        nome:nome,
+
+        series:series || "-",
+
+        reps:reps || "-",
+
+        concluido:false
+
+    });
+
+
+    salvarDadosUsuario();
+
+
+    document
+        .getElementById("nomeExercicio")
+        .value = "";
+
+
+    document
+        .getElementById("seriesExercicio")
+        .value = "";
+
+
+    document
+        .getElementById("repsExercicio")
+        .value = "";
+
+
+    renderizarTreino();
+
+    mostrarToast(
+        "Exercício adicionado!"
+    );
+
+}
+
+
+function renderizarTreino(){
+
+    const u =
+        dadosUsuario();
+
+    if(!u) return;
+
+
+    const container =
+        document
+        .getElementById("fichaTreinoLista");
+
+
+    const treinos =
+        u.treinos || [];
+
+
+    if(!treinos.length){
+
+        container.innerHTML =
+            "<p style='color:var(--cinza)'>Nenhum exercício cadastrado.</p>";
+
+        return;
+
+    }
+
+
+    const grupos = {};
+
+
+    treinos.forEach(treino => {
+
+        if(!grupos[treino.dia])
+            grupos[treino.dia] = [];
+
+        grupos[treino.dia].push(treino);
+
+    });
+
+
+    container.innerHTML = "";
+
+
+    Object.keys(grupos).forEach(dia => {
+
+        const titulo =
+            document.createElement("h3");
+
+        titulo.style.color =
+            "var(--verde)";
+
+        titulo.style.marginBottom =
+            "10px";
+
+        titulo.textContent =
+            dia;
+
+
+        container.appendChild(titulo);
+
+
+        grupos[dia].forEach(treino => {
+
+            const div =
+                document.createElement("div");
+
+            div.className =
+                "exercicio";
+
+
+            div.innerHTML = `
+
+                <div>
+
+                    <strong>
+                        ${escapeHTML(treino.nome)}
+                    </strong>
+
+                    <br>
+
+                    <span>
+                        ${escapeHTML(treino.series)}
+                        séries •
+                        ${escapeHTML(treino.reps)}
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <button
+                        class="btn btn-pequeno"
+                        onclick="alternarExercicio(${treino.id})">
+
+                        ${
+                            treino.concluido
+                            ? "✓ Feito"
+                            : "Marcar"
+                        }
+
+                    </button>
+
+                    <button
+                        class="btn btn-perigo btn-pequeno"
+                        onclick="excluirExercicio(${treino.id})">
+                        ✕
+                    </button>
+
+                </div>
+
+            `;
+
+
+            if(treino.concluido){
+
+                div.style.opacity =
+                    ".55";
+
+            }
+
+
+            container.appendChild(div);
+
+        });
+
+    });
+
+}
+
+
+function alternarExercicio(id){
+
+    const u =
+        dadosUsuario();
+
+
+    const treino =
+        u.treinos.find(
+            t => t.id === id
+        );
+
+
+    if(treino){
+
+        treino.concluido =
+            !treino.concluido;
+
+
+        salvarDadosUsuario();
+
+        renderizarTreino();
+
+    }
+
+}
+
+
+function excluirExercicio(id){
+
+    const u =
+        dadosUsuario();
+
+
+    u.treinos =
+        u.treinos.filter(
+            t => t.id !== id
+        );
+
+
+    salvarDadosUsuario();
+
+    renderizarTreino();
+
+}
+
+
+/* =========================================================
+   IMC
+========================================================= */
+
+function calcularIMC(){
+
+    let idade =
+        Number(
+            document
+            .getElementById("idade")
+            .value
+        );
+
+
+    let altura =
+        Number(
+            document
+            .getElementById("altura")
+            .value
+        );
+
+
+    let peso =
+        Number(
+            document
+            .getElementById("peso")
+            .value
+        );
+
+
+    if(!idade || !altura || !peso){
+
+        mostrarToast(
+            "Preencha idade, altura e peso."
+        );
+
+        return;
+
+    }
+
+
+    const resultado =
+        document
+        .getElementById("resultadoIMC");
+
+
+    resultado.style.display =
+        "block";
+
+
+    if(idade < 20){
+
+        document
+            .getElementById("tituloResultado")
+            .textContent =
+            "Atenção";
+
+
+        document
+            .getElementById("textoResultado")
+            .textContent =
+            "Este cálculo adulto não deve ser utilizado para menores de 20 anos. A avaliação deve utilizar métodos específicos para idade e sexo.";
+
+
+        document
+            .getElementById("faixaPeso")
+            .textContent = "";
+
+
+        document
+            .getElementById("barra")
+            .style.width = "0";
+
+
+        return;
+
+    }
+
+
+    altura =
+        altura / 100;
+
+
+    const imc =
+        peso /
+        (altura*altura);
+
+
+    let classificacao;
+
+
+    if(imc < 18.5)
+        classificacao =
+            "Abaixo da faixa de referência";
+
+    else if(imc < 25)
+        classificacao =
+            "Faixa de referência";
+
+    else if(imc < 30)
+        classificacao =
+            "Acima da faixa de referência";
+
+    else
+        classificacao =
+            "Faixa de obesidade pelo IMC";
+
+
+    const pesoMin =
+        18.5 *
+        altura *
+        altura;
+
+
+    const pesoMax =
+        24.9 *
+        altura *
+        altura;
+
+
+    document
+        .getElementById("tituloResultado")
+        .textContent =
+        "Seu IMC: " +
+        imc.toFixed(1);
+
+
+    document
+        .getElementById("textoResultado")
+        .textContent =
+        "Classificação: " +
+        classificacao;
+
+
+    document
+        .getElementById("faixaPeso")
+        .textContent =
+        "Para sua altura, a faixa correspondente aos valores de IMC 18,5–24,9 é aproximadamente " +
+        pesoMin.toFixed(1) +
+        " kg a " +
+        pesoMax.toFixed(1) +
+        " kg.";
+
+
+    document
+        .getElementById("barra")
+        .style.width =
+        Math.min(
+            (imc/40)*100,
+            100
+        ) + "%";
+
+}
+
+
+/* =========================================================
+   OBJETIVOS
+========================================================= */
+
+function selecionarObjetivo(objetivo,elemento){
+
+    document
+        .querySelectorAll(".objetivo")
+        .forEach(card => {
+
+            card.style.borderColor =
+                "var(--borda)";
+
+        });
+
+
+    elemento.style.borderColor =
+        "var(--verde)";
+
+
+    const treino =
+        document
+        .getElementById("treinoResultado");
+
+
+    treino.style.display =
+        "block";
+
+
+    const nome =
+        document
+        .getElementById("nomeTreino");
+
+
+    const lista =
+        document
+        .getElementById("listaExercicios");
+
+
+    let exercicios = [];
+
+
+    if(objetivo === "hipertrofia"){
+
+        nome.textContent =
+            "💪 Sugestão educativa — Hipertrofia";
+
+
+        exercicios = [
+
+            ["Agachamento","3 séries • 8–12 repetições"],
+            ["Supino","3 séries • 8–12 repetições"],
+            ["Remada","3 séries • 8–12 repetições"],
+            ["Desenvolvimento","3 séries • 8–12 repetições"],
+            ["Elevação lateral","3 séries • 10–15 repetições"]
+
+        ];
+
+    }
+
+
+    if(objetivo === "emagrecimento"){
+
+        nome.textContent =
+            "🔥 Sugestão educativa — Emagrecimento";
+
+
+        exercicios = [
+
+            ["Caminhada rápida","20–30 minutos"],
+            ["Agachamento","3 séries • 10–15 repetições"],
+            ["Flexão","3 séries • 8–12 repetições"],
+            ["Remada","3 séries • 10–12 repetições"],
+            ["Bicicleta","15–25 minutos"]
+
+        ];
+
+    }
+
+
+    if(objetivo === "forca"){
+
+        nome.textContent =
+            "🏋️ Sugestão educativa — Força";
+
+
+        exercicios = [
+
+            ["Agachamento","3–5 séries • repetições moderadas"],
+            ["Supino","3–5 séries • repetições moderadas"],
+            ["Levantamento terra","3 séries • técnica prioritária"],
+            ["Remada","3–4 séries"],
+            ["Desenvolvimento","3–4 séries"]
+
+        ];
+
+    }
+
+
+    if(objetivo === "cardio"){
+
+        nome.textContent =
+            "❤️ Sugestão educativa — Condicionamento";
+
+
+        exercicios = [
+
+            ["Caminhada","20–30 minutos"],
+            ["Corrida leve","15–25 minutos"],
+            ["Bicicleta","20–30 minutos"],
+            ["Escada","10–15 minutos"],
+            ["Alongamento","5–10 minutos"]
+
+        ];
+
+    }
+
+
+    lista.innerHTML = "";
+
+
+    exercicios.forEach(exercicio => {
+
+        const div =
+            document.createElement("div");
+
+
+        div.className =
+            "exercicio";
+
+
+        div.innerHTML = `
+
+            <strong>
+                ${exercicio[0]}
+            </strong>
+
+            <span>
+                ${exercicio[1]}
+            </span>
+
+        `;
+
+
+        lista.appendChild(div);
+
+    });
+
+
+    treino.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+    });
+
+}
+
+
+/* =========================================================
+   FAQ
+========================================================= */
+
+function abrirPergunta(botao){
+
+    const resposta =
+        botao.nextElementSibling;
+
+
+    const todas =
+        document
+        .querySelectorAll(".resposta");
+
+
+    todas.forEach(item => {
+
+        if(item !== resposta)
+            item.style.display =
+                "none";
+
+    });
+
+
+    resposta.style.display =
+        resposta.style.display === "block"
+        ? "none"
+        : "block";
+
+}
+
+
+/* =========================================================
+   MENU
+========================================================= */
+
+function abrirMenu(){
+
+    document
+        .getElementById("menu")
+        .classList.toggle("ativo");
+
+}
+
+
+/* =========================================================
+   TEMA
+========================================================= */
+
+function alternarTema(){
+
+    document
+        .body
+        .classList
+        .toggle("light");
+
+
+    localStorage.setItem(
+        "fitlife_tema",
+        document.body.classList.contains("light")
+        ? "light"
+        : "dark"
+    );
+
+}
+
+
+function carregarTema(){
+
+    const tema =
+        localStorage.getItem(
+            "fitlife_tema"
+        );
+
+
+    if(tema === "light"){
+
+        document
+            .body
+            .classList
+            .add("light");
+
+    }
+
+}
+
+
+/* =========================================================
+   WHATSAPP
+========================================================= */
+
+function configurarWhatsApp(){
+
+    const botao =
+        document
+        .getElementById("whatsappButton");
+
+
+    if(WHATSAPP !== "55 31995549826"){
+
+        botao.href =
+            "https://wa.me/" +
+            WHATSAPP +
+            "?text=Olá! Gostaria de saber mais sobre o FitLife.";
+
+    }
+
+    else{
+
+        botao.href =
+            "#";
+
+        botao.onclick =
+            function(event){
+
+                event.preventDefault();
+
+                mostrarToast(
+                    "Configure o número do WhatsApp no código."
+                );
+
+            };
+
+    }
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function mostrarToast(mensagem){
+
+    const toast =
+        document
+        .getElementById("toast");
+
+
+    toast.textContent =
+        mensagem;
+
+
+    toast.classList.add("show");
+
+
+    setTimeout(() => {
+
+        toast.classList.remove("show");
+
+    },2500);
+
+}
+
+
+/* =========================================================
+   UTILITÁRIOS
+========================================================= */
+
+function formatarNumero(numero){
+
+    return Number(numero)
+        .toLocaleString("pt-BR");
+
+}
+
+
+function formatarData(data){
+
+    if(!data)
+        return "-";
+
+
+    const partes =
+        data.split("-");
+
+
+    if(partes.length !== 3)
+        return data;
+
+
+    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+
+}
+
+
+function escapeHTML(text){
+
+    return String(text)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        carregarTema();
+
+        configurarWhatsApp();
+
+
+        if(usuarioAtual &&
+           usuarios[usuarioAtual]){
+
+            entrarNoApp();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
